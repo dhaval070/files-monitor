@@ -7,16 +7,27 @@ import (
 	"filemon/internal/repository"
 	"log"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "modernc.org/sqlite"
 )
+
+func init() {
+
+}
 
 func main() {
 	var cfg = config.MustReadConfig()
 
-	dbh, err := sql.Open("mysql", cfg.DB_DSN)
+	dbh, err := sql.Open("sqlite", cfg.DB_DSN)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	if _, err := dbh.Exec(`
+	CREATE TABLE IF NOT EXISTS fileinfo(file_name varchar(128) constraint pk primary key, file_size int);
+	`); err != nil {
+		log.Fatal(err)
+	}
+
 	repo := &repository.Repository{
 		Dbh: dbh,
 	}

@@ -1,2 +1,2 @@
 data_dir: "var/"
-db_dsn: "root:bitnami@tcp(localhost:5506)/filemon"
+db_dsn: "db.sqlite"
